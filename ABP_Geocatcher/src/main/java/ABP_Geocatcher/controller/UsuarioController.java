@@ -45,9 +45,15 @@ public class UsuarioController {
 
     @PutMapping("/usuario/{id}")
     public ResponseEntity putPic(@RequestBody Usuario usuario, @PathVariable int id) {
-        usuario.setId(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+        try {
+            // Cridem al servei per actualitzar l'usuari
+            Usuario usuario = usuarioService.actualizarUsuario(id, usuarioActualizado);
+            return ResponseEntity.ok(usuario); // Retornem l'usuari actualitzat
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build(); // Retornem 404 si l'usuari no es troba
+        }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<String> postLogin(@RequestBody Usuario usuario) {
